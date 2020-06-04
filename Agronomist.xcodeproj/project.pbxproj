@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FB3AACFF2485EC510085EE9E /* PlantEditorForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB3AACFE2485EC510085EE9E /* PlantEditorForm.swift */; };
+		FB8634B424869AE2004A9112 /* NewPlantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8634B324869AE2004A9112 /* NewPlantView.swift */; };
+		FB8634B624870659004A9112 /* EditPlantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8634B524870659004A9112 /* EditPlantView.swift */; };
+		FB8634B824871C06004A9112 /* Binding+DefaultValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8634B724871C06004A9112 /* Binding+DefaultValue.swift */; };
+		FB8634BA248889C2004A9112 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = FB8634B9248889C2004A9112 /* Localizable.stringsdict */; };
 		FBC024A524853DAD0006EF39 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC024A424853DAD0006EF39 /* AppDelegate.swift */; };
 		FBC024A724853DAD0006EF39 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC024A624853DAD0006EF39 /* SceneDelegate.swift */; };
 		FBC024AA24853DAD0006EF39 /* Agronomist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FBC024A824853DAD0006EF39 /* Agronomist.xcdatamodeld */; };
@@ -14,9 +19,17 @@
 		FBC024AE24853DAF0006EF39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FBC024AD24853DAF0006EF39 /* Assets.xcassets */; };
 		FBC024B124853DAF0006EF39 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FBC024B024853DAF0006EF39 /* Preview Assets.xcassets */; };
 		FBC024B424853DAF0006EF39 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FBC024B224853DAF0006EF39 /* LaunchScreen.storyboard */; };
+		FBC024C424854F130006EF39 /* PlantsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC024C324854F130006EF39 /* PlantsListView.swift */; };
+		FBC024C924859CE50006EF39 /* PlantsListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC024C824859CE50006EF39 /* PlantsListRowView.swift */; };
+		FBC024CC24859D930006EF39 /* PlantDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC024CB24859D930006EF39 /* PlantDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FB3AACFE2485EC510085EE9E /* PlantEditorForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantEditorForm.swift; sourceTree = "<group>"; };
+		FB8634B324869AE2004A9112 /* NewPlantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlantView.swift; sourceTree = "<group>"; };
+		FB8634B524870659004A9112 /* EditPlantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlantView.swift; sourceTree = "<group>"; };
+		FB8634B724871C06004A9112 /* Binding+DefaultValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+DefaultValue.swift"; sourceTree = "<group>"; };
+		FB8634B9248889C2004A9112 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
 		FBC024A124853DAD0006EF39 /* Agronomist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Agronomist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBC024A424853DAD0006EF39 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FBC024A624853DAD0006EF39 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -26,6 +39,9 @@
 		FBC024B024853DAF0006EF39 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FBC024B324853DAF0006EF39 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FBC024B524853DAF0006EF39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FBC024C324854F130006EF39 /* PlantsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantsListView.swift; sourceTree = "<group>"; };
+		FBC024C824859CE50006EF39 /* PlantsListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantsListRowView.swift; sourceTree = "<group>"; };
+		FBC024CB24859D930006EF39 /* PlantDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +55,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FB3AACFD2485EC320085EE9E /* PlantEditorForm */ = {
+			isa = PBXGroup;
+			children = (
+				FB3AACFE2485EC510085EE9E /* PlantEditorForm.swift */,
+				FB8634B524870659004A9112 /* EditPlantView.swift */,
+			);
+			path = PlantEditorForm;
+			sourceTree = "<group>";
+		};
+		FB8634B224869AD3004A9112 /* NewPlantView */ = {
+			isa = PBXGroup;
+			children = (
+				FB8634B324869AE2004A9112 /* NewPlantView.swift */,
+			);
+			path = NewPlantView;
+			sourceTree = "<group>";
+		};
 		FBC0249824853DAD0006EF39 = {
 			isa = PBXGroup;
 			children = (
@@ -58,6 +91,10 @@
 		FBC024A324853DAD0006EF39 /* Agronomist */ = {
 			isa = PBXGroup;
 			children = (
+				FB8634B224869AD3004A9112 /* NewPlantView */,
+				FB3AACFD2485EC320085EE9E /* PlantEditorForm */,
+				FBC024BB24853DC20006EF39 /* Plants List */,
+				FBC024CA24859D850006EF39 /* Plant Detail */,
 				FBC024A424853DAD0006EF39 /* AppDelegate.swift */,
 				FBC024A624853DAD0006EF39 /* SceneDelegate.swift */,
 				FBC024AB24853DAD0006EF39 /* ContentView.swift */,
@@ -66,6 +103,8 @@
 				FBC024B524853DAF0006EF39 /* Info.plist */,
 				FBC024A824853DAD0006EF39 /* Agronomist.xcdatamodeld */,
 				FBC024AF24853DAF0006EF39 /* Preview Content */,
+				FB8634B724871C06004A9112 /* Binding+DefaultValue.swift */,
+				FB8634B9248889C2004A9112 /* Localizable.stringsdict */,
 			);
 			path = Agronomist;
 			sourceTree = "<group>";
@@ -76,6 +115,23 @@
 				FBC024B024853DAF0006EF39 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		FBC024BB24853DC20006EF39 /* Plants List */ = {
+			isa = PBXGroup;
+			children = (
+				FBC024C324854F130006EF39 /* PlantsListView.swift */,
+				FBC024C824859CE50006EF39 /* PlantsListRowView.swift */,
+			);
+			path = "Plants List";
+			sourceTree = "<group>";
+		};
+		FBC024CA24859D850006EF39 /* Plant Detail */ = {
+			isa = PBXGroup;
+			children = (
+				FBC024CB24859D930006EF39 /* PlantDetailView.swift */,
+			);
+			path = "Plant Detail";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,6 +193,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBC024B424853DAF0006EF39 /* LaunchScreen.storyboard in Resources */,
+				FB8634BA248889C2004A9112 /* Localizable.stringsdict in Resources */,
 				FBC024B124853DAF0006EF39 /* Preview Assets.xcassets in Resources */,
 				FBC024AE24853DAF0006EF39 /* Assets.xcassets in Resources */,
 			);
@@ -149,9 +206,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBC024C424854F130006EF39 /* PlantsListView.swift in Sources */,
+				FBC024C924859CE50006EF39 /* PlantsListRowView.swift in Sources */,
+				FB3AACFF2485EC510085EE9E /* PlantEditorForm.swift in Sources */,
+				FBC024CC24859D930006EF39 /* PlantDetailView.swift in Sources */,
 				FBC024AA24853DAD0006EF39 /* Agronomist.xcdatamodeld in Sources */,
+				FB8634B824871C06004A9112 /* Binding+DefaultValue.swift in Sources */,
 				FBC024A524853DAD0006EF39 /* AppDelegate.swift in Sources */,
+				FB8634B424869AE2004A9112 /* NewPlantView.swift in Sources */,
 				FBC024AC24853DAD0006EF39 /* ContentView.swift in Sources */,
+				FB8634B624870659004A9112 /* EditPlantView.swift in Sources */,
 				FBC024A724853DAD0006EF39 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
