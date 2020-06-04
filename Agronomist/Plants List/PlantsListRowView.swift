@@ -7,24 +7,26 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct PlantsListRowView: View {
-    @ObservedObject var plant: Plant
-    
-    var name: String {
-        return plant.name ?? "NO_NAME"
-    }
+    @ObservedObject var plantListRowVM: PlantListRowViewModel
     
     var body: some View {
-        Text(name)
+        Text(plantListRowVM.name)
     }
 }
 
 struct PlantListRowView_Previews: PreviewProvider {
-    @Environment(\.managedObjectContext) static var moc
-    @FetchRequest(sortDescriptors: []) static var plants: FetchedResults<Plant>
-    
     static var previews: some View {
-        PlantsListRowView(plant: plants[0])
+        let moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        let plant = Plant(context: moc)
+        plant.id = UUID()
+        plant.name = "My New Plant"
+        plant.sun_tolerance = "part_shade"
+        plant.water_interval = ""
+        plant.water_interval_period = ""
+        
+        return PlantsListRowView(plantListRowVM: .init(plant: plant))
     }
 }

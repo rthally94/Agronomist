@@ -9,18 +9,21 @@
 import SwiftUI
 
 struct PlantsListView: View {
-    @Environment(\.managedObjectContext) var moc
-    @FetchRequest(entity: Plant.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Plant.name, ascending: true)]) var plants: FetchedResults<Plant>
+    @ObservedObject var plantListVM: PlantListViewModel
+    
+    init() {
+        plantListVM = PlantListViewModel()
+    }
     
     @State var showAddPlantForm: Bool = false
     
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottomLeading) {
-                List(plants, id: \.id) { plant in
-                    NavigationLink(destination: PlantDetailView(plant: plant)) {
-                        PlantsListRowView(plant: plant)
-                    }
+                List(plantListVM.plants, id: \.name ) { plant in
+//                    NavigationLink(destination: PlantDetailView(plant: plant)) {
+                        PlantsListRowView(plantListRowVM: plant)
+//                    }
                 }
                 .listStyle(GroupedListStyle())
                 
@@ -30,7 +33,7 @@ struct PlantsListView: View {
                 )
                     .padding()
                     .sheet(isPresented: $showAddPlantForm, onDismiss: {self.showAddPlantForm = false}) {
-                        NewPlantView().environment(\.managedObjectContext, self.moc)
+                        NewPlantView()
                 }
                     
             }
