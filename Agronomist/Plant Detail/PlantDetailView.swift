@@ -20,6 +20,7 @@ struct PlantDetailView: View {
         List {
             Section(header: Text("Name")) {
                 plant.name.map(Text.init)
+                
             }
             
             Section(header: Text("Growing Conditions")) {

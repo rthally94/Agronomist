@@ -13,7 +13,10 @@ struct PlantsListRowView: View {
     @ObservedObject var plant: Plant
     
     var body: some View {
-        plant.name.map(Text.init)
+        VStack {
+            plant.name.map(Text.init)
+            
+        }
     }
 }
 
