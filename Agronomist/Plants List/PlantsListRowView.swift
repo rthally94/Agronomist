@@ -10,10 +10,10 @@ import SwiftUI
 import CoreData
 
 struct PlantsListRowView: View {
-    @ObservedObject var plantListRowVM: PlantListRowViewModel
+    @ObservedObject var plant: Plant
     
     var body: some View {
-        Text(plantListRowVM.name)
+        plant.name.map(Text.init)
     }
 }
 
@@ -24,9 +24,9 @@ struct PlantListRowView_Previews: PreviewProvider {
         plant.id = UUID()
         plant.name = "My New Plant"
         plant.sun_tolerance = "part_shade"
-        plant.water_interval = ""
-        plant.water_interval_period = ""
+        plant.water_req_interval = 0
+        plant.water_req_calendar = ""
         
-        return PlantsListRowView(plantListRowVM: .init(plant: plant))
+        return PlantsListRowView(plant: plant)
     }
 }

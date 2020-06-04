@@ -32,6 +32,20 @@ class CoreDataService {
         return plants
     }
     
+    func delete(_ plant: Plant) {
+        moc.delete(plant)
+    }
+    
+    func saveContext() {
+        if moc.hasChanges {
+            do {
+                try moc.save()
+                print("Saved Successfully")
+            } catch {
+                print("Could not save context: \(error)")
+            }
+        }
+    }
 }
 
 extension NSManagedObjectContext {

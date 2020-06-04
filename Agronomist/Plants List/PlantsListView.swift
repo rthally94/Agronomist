@@ -7,23 +7,21 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct PlantsListView: View {
-    @ObservedObject var plantListVM: PlantListViewModel
-    
-    init() {
-        plantListVM = PlantListViewModel()
-    }
+    @FetchRequest(entity: Plant.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Plant.name, ascending: true)]) var plants: FetchedResults<Plant>
+    @Environment(\.managedObjectContext) var moc
     
     @State var showAddPlantForm: Bool = false
     
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottomLeading) {
-                List(plantListVM.plants, id: \.name ) { plant in
-//                    NavigationLink(destination: PlantDetailView(plant: plant)) {
-                        PlantsListRowView(plantListRowVM: plant)
-//                    }
+                List(plants, id: \.id ) { plant in
+                    NavigationLink(destination: PlantDetailView(plant: plant)) {
+                        PlantsListRowView(plant: plant)
+                    }
                 }
                 .listStyle(GroupedListStyle())
                 
@@ -33,11 +31,29 @@ struct PlantsListView: View {
                 )
                     .padding()
                     .sheet(isPresented: $showAddPlantForm, onDismiss: {self.showAddPlantForm = false}) {
-                        NewPlantView()
+                        PlantForm { name, sun, water_int, water_cal in
+                            let newPlant = Plant(context: self.moc)
+                            newPlant.id = UUID()
+                            newPlant.name = name
+                            newPlant.sun_tolerance = sun
+                            newPlant.water_req_calendar = water_cal
+                            newPlant.water_req_interval = Int32(water_int)
+                            
+                            self.saveContext()
+                        }
                 }
-                    
             }
             .navigationBarTitle("Plants")
+        }
+    }
+    
+    private func saveContext() {
+        if moc.hasChanges {
+            do {
+                try moc.save()
+            } catch {
+                print("Cannot save context: \(error)")
+            }
         }
     }
 }

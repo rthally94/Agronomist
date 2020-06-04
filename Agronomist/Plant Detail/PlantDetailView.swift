@@ -16,59 +16,67 @@ struct PlantDetailView: View {
     @ObservedObject var plant: Plant
     @State var editMode: Bool = false
     
-    var name: String {
-        return plant.name ?? "NO_NAME"
-    }
-    
-    var uuid: String {
-        if let id = plant.id {
-            return "\(id)"
-        } else {
-            return "NO_ID"
-        }
-    }
-    
-    var sunTolaranceText: String {
-        let value = plant.sun_tolerance ?? "NO_VALUE"
-        return value.capitalized.replacingOccurrences(of: "_", with: " ")
-    }
-    
-    var waterFrequencyText: String {
-        let value = plant.water_interval ?? "NO_VALUE"
-        let parts = value.split(separator: "|")
-        return value.capitalized.replacingOccurrences(of: "|", with: " ") + "\(Int(parts[0]) ?? 0 > 1 ? "s" : "")"
-    }
-    
     var body: some View {
         List {
-            Section {
-                Text(name)
+            Section(header: Text("Name")) {
+                plant.name.map(Text.init)
             }
             
-            Section {
-                Text(sunTolaranceText)
-                Text(waterFrequencyText)
+            Section(header: Text("Growing Conditions")) {
+                VStack(alignment: .leading) {
+                    Text("Sun Tolerance").font(.caption)
+                    plant.sun_tolerance.map(formatForDisplay).map(Text.init)
+                }
+                
+                VStack(alignment: .leading) {
+                    Text("Water Requirements").font(.caption)
+                    HStack {
+                        Text("\(plant.water_req_interval)")
+                        plant.water_req_calendar.map(formatForDisplay).map(Text.init)
+                    }
+                }
             }
         }
         .sheet(
             isPresented: $editMode,
             onDismiss: {
                 self.editMode = false
-                if self.plant.name == nil {
-                    self.presentationMode.wrappedValue.dismiss()
-                }
         }) {
-            EditPlantView(plant: self.plant).environment(\.managedObjectContext, self.moc)
+            PlantForm(plant: self.plant, onDelete: { self.deletePlant() }) { name, sun, water_int, water_cal in
+                self.plant.name = name
+                self.plant.sun_tolerance = sun
+                self.plant.water_req_interval = Int32(water_int)
+                self.plant.water_req_calendar = water_cal
+                
+                self.saveContext()
+            }
         }
         .listStyle(GroupedListStyle())
-        .navigationBarTitle("\(name)", displayMode: .inline)
+        .navigationBarTitle("\(plant.name ?? "NO_NAME")", displayMode: .inline)
         .navigationBarItems(trailing: Button("Edit") {self.editMode = true} )
     }
     
-    private func deleteAction() {
+    func formatForDisplay(_ input: String) -> String {
+        return input.replacingOccurrences(of: "|", with: " ").replacingOccurrences(of: "_", with: " ").capitalized
+    }
+    
+    // MARK: Intents
+    
+    private func deletePlant() {
         print("Delete Pressed")
         moc.delete(plant)
+        self.saveContext()
         presentationMode.wrappedValue.dismiss()
+    }
+    
+    private func saveContext() {
+        if moc.hasChanges {
+            do {
+                try moc.save()
+            } catch {
+                print("Cannot save context: \(error)")
+            }
+        }
     }
 }
 
