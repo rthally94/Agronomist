@@ -12,10 +12,25 @@ import CoreData
 struct PlantsListRowView: View {
     @ObservedObject var plant: Plant
     
+    let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateStyle = .short
+        df.timeStyle = .short
+        return df
+    }()
+    
+    var lastLoggedString: String {
+        if let lastUpdate = plant.waterLogArray.first {
+            return "Last watered \(dateFormatter.string(from: lastUpdate.wrappedDate))"
+        } else {
+            return "Not logged."
+        }
+    }
+    
     var body: some View {
-        VStack {
-            plant.name.map(Text.init)
-            
+        VStack(alignment: .leading) {
+            Text(plant.wrappedName)
+            Text(lastLoggedString).font(.caption)
         }
     }
 }

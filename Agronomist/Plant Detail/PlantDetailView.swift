@@ -16,10 +16,29 @@ struct PlantDetailView: View {
     @ObservedObject var plant: Plant
     @State var editMode: Bool = false
     
-    var body: some View {
+    let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateStyle = .short
+        df.timeStyle = .short
+        return df
+    }()
+    
+    var lastLoggedString: String {
+        if let lastUpdate = plant.waterLogArray.first {
+            return dateFormatter.string(from: lastUpdate.wrappedDate)
+        } else {
+            return "Not logged."
+        }
+    }
+    
+    var detailContent: some View {
         List {
-            Section(header: Text("Name")) {
+            Section {
                 plant.name.map(Text.init)
+                VStack(alignment: .leading) {
+                    Text("Last Watered").font(.caption)
+                    Text(lastLoggedString)
+                }
                 
             }
             
@@ -37,6 +56,30 @@ struct PlantDetailView: View {
                     }
                 }
             }
+            
+            Section(header: Text("Water Logs")) {
+                ForEach(plant.waterLogArray, id: \.wrappedDate) { log in
+                    Text(self.dateFormatter.string(from: log.wrappedDate))
+                }
+            }
+        }
+    }
+    
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            detailContent
+            Button(
+                action: {
+                    let log = WaterLog(context: self.moc)
+                    log.date = Date()
+                    self.plant.addToWaterLogs(log)
+                    
+                    self.saveContext()
+            },
+                label: {
+                    Text("Log Water")
+            })
+                .buttonStyle(RoundedButtonStyle())
         }
         .sheet(
             isPresented: $editMode,
@@ -78,6 +121,20 @@ struct PlantDetailView: View {
                 print("Cannot save context: \(error)")
             }
         }
+    }
+}
+
+struct RoundedButtonStyle: ButtonStyle {
+    
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .padding()
+            .foregroundColor(.white)
+            .background(Color.blue)
+            .cornerRadius(40)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 10)
     }
 }
 
