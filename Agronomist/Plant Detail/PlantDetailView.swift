@@ -78,6 +78,7 @@ struct PlantDetailView: View {
             },
                 label: {
                     Text("Log Water")
+                        .fontWeight(.bold)
             })
                 .buttonStyle(RoundedButtonStyle())
         }

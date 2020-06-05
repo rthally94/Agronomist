@@ -59,6 +59,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FB1A4688248A665A0078AC88 /* PlantTodayView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = PlantTodayView;
+			sourceTree = "<group>";
+		};
 		FB3AACFD2485EC320085EE9E /* PlantEditorForm */ = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +104,7 @@
 		FBC024A324853DAD0006EF39 /* Agronomist */ = {
 			isa = PBXGroup;
 			children = (
+				FB1A4688248A665A0078AC88 /* PlantTodayView */,
 				FB8634C82489BA92004A9112 /* Models */,
 				FB3AACFD2485EC320085EE9E /* PlantEditorForm */,
 				FBC024BB24853DC20006EF39 /* Plants List */,
