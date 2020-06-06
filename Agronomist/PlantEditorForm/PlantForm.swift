@@ -16,13 +16,14 @@ struct PlantForm: View {
     let isEditing: Bool
     
     @State var name: String
-    @State var sunTolerancePickerChoice: Int
+    @State var sunTolerancePickerChoice: SunTolarance = .fullShade
+    
     @State var waterRequirementPickerIsVisible: Bool = false
-    @State var waterRequirementPickerCalendarChoice: Int
+    @State var waterRequirementPickerUnitChoice: String
     @State var waterRequirementPickerIntervalChoice: Int
     
     var chosenInterval: DateComponents {
-        switch waterRequirementCalendarPickerStates[waterRequirementPickerCalendarChoice] {
+        switch waterRequirementPickerUnitChoice {
         case "day":
             return DateComponents(day: waterRequirementPickerIntervalChoice + 1)
         case "week":
@@ -46,9 +47,9 @@ struct PlantForm: View {
         self.isEditing = false
         
         _name = State(initialValue: defaultName)
-        _sunTolerancePickerChoice = State(initialValue: 0)
+        _sunTolerancePickerChoice = State(initialValue: .fullShade)
         _waterRequirementPickerIntervalChoice = State(initialValue: 0)
-        _waterRequirementPickerCalendarChoice = State(initialValue: 0)
+        _waterRequirementPickerUnitChoice = State(initialValue: "day")
     }
     
     init(onSave: @escaping (String, String, Date) -> Void) {
@@ -58,9 +59,9 @@ struct PlantForm: View {
         self.isEditing = false
         
         _name = State(initialValue: defaultName)
-        _sunTolerancePickerChoice = State(initialValue: 0)
+        _sunTolerancePickerChoice = State(initialValue: .fullShade)
         _waterRequirementPickerIntervalChoice = State(initialValue: 0)
-        _waterRequirementPickerCalendarChoice = State(initialValue: 0)
+        _waterRequirementPickerUnitChoice = State(initialValue: "day")
     }
     
     init(plant: Plant, onDelete: @escaping () -> Void, onSave: @escaping (String, String, Date) -> Void) {
@@ -71,9 +72,9 @@ struct PlantForm: View {
         
         let defName = defaultName
         _name = State(initialValue: plant.name ?? defName)
-        _sunTolerancePickerChoice = State(initialValue: sunTolarancePickerStates.firstIndex(where: {$0.storedName == plant.sun_tolerance}) ?? 0)
+        _sunTolerancePickerChoice = State(initialValue: plant.wrappedSunTolerance)
         _waterRequirementPickerIntervalChoice = State(initialValue: plant.waterRequirementValue)
-        _waterRequirementPickerCalendarChoice = State(initialValue: waterRequirementCalendarPickerStates.firstIndex(of: plant.waterRequirementUnit) ?? 0)
+        _waterRequirementPickerUnitChoice = State(initialValue: plant.waterRequirementUnit)
     }
     
     init(plant: Plant, onSave: @escaping (String, String, Date) -> Void) {
@@ -84,9 +85,9 @@ struct PlantForm: View {
         
         let defName = defaultName
         _name = State(initialValue: plant.name ?? defName)
-        _sunTolerancePickerChoice = State(initialValue: sunTolarancePickerStates.firstIndex(where: {$0.storedName == plant.sun_tolerance}) ?? 0)
+        _sunTolerancePickerChoice = State(initialValue: plant.wrappedSunTolerance)
         _waterRequirementPickerIntervalChoice = State(initialValue: plant.waterRequirementValue)
-        _waterRequirementPickerCalendarChoice = State(initialValue: waterRequirementCalendarPickerStates.firstIndex(of: plant.waterRequirementUnit) ?? 0)
+        _waterRequirementPickerUnitChoice = State(initialValue: plant.waterRequirementUnit)
     }
     
     var body: some View {
@@ -101,13 +102,13 @@ struct PlantForm: View {
                         self.sunTolerancePickerChoice = res
                         self.dismissKeyboard()
                     })) {
-                        ForEach(0..<sunTolarancePickerStates.count, id: \.self) { index in
+                        ForEach(sunTolerancePickerStates, id: \.self) { state in
                             VStack(alignment: .leading) {
-                                Text(self.sunTolarancePickerStates[index].storedName)
-                                Text(self.sunTolarancePickerStates[index].description)
+                                Text(SunTolarance.formattedTitle(for: state))
+                                Text(SunTolarance.description(for: state))
                                     .font(.caption)
                             }
-                            .tag(index)
+                            .tag(state)
                         }
                     }
                     
@@ -135,13 +136,23 @@ struct PlantForm: View {
                                     .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: .infinity)
                                     .clipped()
                                     
-                                    Picker("Calendar", selection: $waterRequirementPickerCalendarChoice) {
-                                        ForEach(0..<waterRequirementCalendarPicker.count) { index in
-                                            Text(self.waterRequirementCalendarPicker[index]).tag(index)
+                                    if waterRequirementPickerIntervalChoice == 0 {
+                                        Picker("Calendar", selection: $waterRequirementPickerUnitChoice) {
+                                            ForEach(waterRequirementUnits, id: \.self) { unit in
+                                                Text(unit).tag(unit)
+                                            }
                                         }
+                                        .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: .infinity)
+                                        .clipped()
+                                    } else {
+                                        Picker("Calendar", selection: $waterRequirementPickerUnitChoice) {
+                                            ForEach(waterRequirementUnits, id: \.self) { unit in
+                                                Text(unit.appending("s")).tag(unit)
+                                            }
+                                        }
+                                        .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: .infinity)
+                                        .clipped()
                                     }
-                                    .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: .infinity)
-                                    .clipped()
                                 }
                                 .labelsHidden()
                                 .pickerStyle(WheelPickerStyle())
@@ -170,7 +181,7 @@ struct PlantForm: View {
                 trailing: Button("Save", action: {
                     self.onSave(
                         self.name == "" ? self.defaultName : self.name,
-                        self.sunTolarancePickerStates[self.sunTolerancePickerChoice].storedName,
+                        self.sunTolerancePickerChoice.rawValue,
                         self.chosenInterval.date ?? Date()
                     )
                     
@@ -190,13 +201,9 @@ struct PlantForm: View {
     }
     
     // MARK: Exposed Properties
-    var sunTolarancePicker: [(name: String, description: String)] {
-        return sunTolarancePickerStates.map { ($0.storedName.capitalized, $0.description.capitalized) }
-    }
     
-    // TODO: Updated pluralization not being pushed on number chnage. Needs a forced refresh to appear.
     var waterRequirementCalendarPicker: [String] {
-        return waterRequirementCalendarPickerStates
+        return waterRequirementUnits
     }
     
     var waterRequirementIntervalPicker: [String] {
@@ -208,7 +215,7 @@ struct PlantForm: View {
     }
     
     var currentWaterRequirementTextShort: String {
-        switch waterRequirementCalendarPickerStates[waterRequirementPickerCalendarChoice] {
+        switch waterRequirementPickerUnitChoice {
         case "week":
             let relative = relativeDateFormatter.localizedString(from: chosenInterval).replacingOccurrences(of: "day", with: "week").replacingOccurrences(of: "in", with: "every").split(separator: " ")
             let interval = Int(String(relative[1])) ?? 7
@@ -228,15 +235,11 @@ struct PlantForm: View {
     }()
     
     // MARK: Picker Constants
+    private var sunTolerancePickerStates: [SunTolarance] {
+        return SunTolarance.allCases
+    }
     
-    private let sunTolarancePickerStates: [(storedName: String, description: String)] = [
-        ("full_shade", "1 hour of direct sun"),
-        ("partial_shade", "2 hours of direct sun"),
-        ("light_shade", "3-5 hours of direct sun"),
-        ("full_sun", "6+ hours of direct sun")
-    ]
-    
-    private let waterRequirementCalendarPickerStates: [String] = [
+    private let waterRequirementUnits: [String] = [
         "day",
         "week",
         "month",

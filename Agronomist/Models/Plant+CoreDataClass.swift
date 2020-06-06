@@ -16,8 +16,8 @@ public class Plant: NSManagedObject {
         return name ?? "NO_NAME"
     }
     
-    var wrappedSunTolerance: String {
-        return sun_tolerance ?? "NO_VALUE"
+    var wrappedSunTolerance: SunTolarance {
+        return SunTolarance.init(rawValue: sun_tolerance ?? "") ?? SunTolarance.fullShade
     }
     
     var wrapppedWaterRequirementInterval: Date {

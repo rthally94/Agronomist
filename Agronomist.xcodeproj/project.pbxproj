@@ -29,6 +29,7 @@
 		FBC024C424854F130006EF39 /* PlantsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC024C324854F130006EF39 /* PlantsListView.swift */; };
 		FBC024C924859CE50006EF39 /* PlantsListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC024C824859CE50006EF39 /* PlantsListRowView.swift */; };
 		FBC024CC24859D930006EF39 /* PlantDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC024CB24859D930006EF39 /* PlantDetailView.swift */; };
+		FBD97DF6248BD67A0021136B /* SunTolarance.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD97DF5248BD67A0021136B /* SunTolarance.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		FBC024C324854F130006EF39 /* PlantsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantsListView.swift; sourceTree = "<group>"; };
 		FBC024C824859CE50006EF39 /* PlantsListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantsListRowView.swift; sourceTree = "<group>"; };
 		FBC024CB24859D930006EF39 /* PlantDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantDetailView.swift; sourceTree = "<group>"; };
+		FBD97DF5248BD67A0021136B /* SunTolarance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunTolarance.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				FB8634CA2489BC5F004A9112 /* WaterLog+CoreDataProperties.swift */,
 				FB8634C42489BA8C004A9112 /* Plant+CoreDataClass.swift */,
 				FB8634C52489BA8C004A9112 /* Plant+CoreDataProperties.swift */,
+				FBD97DF5248BD67A0021136B /* SunTolarance.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 				FB8634CC2489BC5F004A9112 /* WaterLog+CoreDataProperties.swift in Sources */,
 				FB1A4697248AC9560078AC88 /* AddIcon.swift in Sources */,
 				FBC024A524853DAD0006EF39 /* AppDelegate.swift in Sources */,
+				FBD97DF6248BD67A0021136B /* SunTolarance.swift in Sources */,
 				FB1A468A248A66A30078AC88 /* PlantWateringTodayView.swift in Sources */,
 				FBC024AC24853DAD0006EF39 /* ContentView.swift in Sources */,
 				FBC024A724853DAD0006EF39 /* SceneDelegate.swift in Sources */,
