@@ -20,6 +20,7 @@ struct PlantForm: View {
     @State var waterRequirementPickerIsVisible: Bool = false
     @State var waterRequirementPickerCalendarChoice: Int
     @State var waterRequirementPickerIntervalChoice: Int
+    
     var chosenInterval: DateComponents {
         switch waterRequirementCalendarPickerStates[waterRequirementPickerCalendarChoice] {
         case "day":
@@ -139,7 +140,6 @@ struct PlantForm: View {
                                             Text(self.waterRequirementCalendarPicker[index]).tag(index)
                                         }
                                     }
-                                    .id(1)
                                     .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: .infinity)
                                     .clipped()
                                 }
@@ -194,12 +194,13 @@ struct PlantForm: View {
         return sunTolarancePickerStates.map { ($0.storedName.capitalized, $0.description.capitalized) }
     }
     
+    // TODO: Updated pluralization not being pushed on number chnage. Needs a forced refresh to appear.
     var waterRequirementCalendarPicker: [String] {
-        return waterRequirementCalendarPickerStates.map { $0.appending(waterRequirementPickerIntervalChoice == 0 ? "" : "s").capitalized}
+        return waterRequirementCalendarPickerStates
     }
     
     var waterRequirementIntervalPicker: [String] {
-        return waterRequirementInterval.map{"\($0)"}
+        return waterRequirementInterval.map{"\($0)".capitalized}
     }
     
     var currentWaterRequirementTextLong: String {
