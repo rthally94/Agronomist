@@ -51,8 +51,8 @@ struct PlantDetailView: View {
                 VStack(alignment: .leading) {
                     Text("Water Requirements").font(.caption)
                     HStack {
-                        Text("\(plant.water_req_interval)")
-                        plant.water_req_calendar.map(formatForDisplay).map(Text.init)
+// TODO : Add Formatter                        Text("\(plant.water_req_interval)")
+                        Text("fda")
                     }
                 }
             }
@@ -87,11 +87,10 @@ struct PlantDetailView: View {
             onDismiss: {
                 self.editMode = false
         }) {
-            PlantForm(plant: self.plant, onDelete: { self.deletePlant() }) { name, sun, water_int, water_cal in
+            PlantForm(plant: self.plant, onDelete: { self.deletePlant() }) { name, sun, water_int in
                 self.plant.name = name
                 self.plant.sun_tolerance = sun
-                self.plant.water_req_interval = Int32(water_int)
-                self.plant.water_req_calendar = water_cal
+                self.plant.water_req_interval = water_int
                 
                 self.saveContext()
             }

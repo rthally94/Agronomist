@@ -11,12 +11,18 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView {
+            PlantWateringTodayView()
+                .tabItem {
+                    Image(systemName: "leaf.arrow.circlepath")
+                    Text("Today")
+            }
+            
             PlantsListView()
                 .tabItem {
                     Image(systemName: "list.dash")
                     Text("Plants")
-                }
-        }
+            }
+        }.accentColor(.green)
     }
 }
 

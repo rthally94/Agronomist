@@ -42,8 +42,7 @@ struct PlantListRowView_Previews: PreviewProvider {
         plant.id = UUID()
         plant.name = "My New Plant"
         plant.sun_tolerance = "part_shade"
-        plant.water_req_interval = 0
-        plant.water_req_calendar = ""
+        plant.water_req_interval = Date()
         
         return PlantsListRowView(plant: plant)
     }

@@ -4,8 +4,7 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="sun_tolerance" optional="YES" attributeType="String"/>
-        <attribute name="water_req_calendar" optional="YES" attributeType="String"/>
-        <attribute name="water_req_interval" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="water_req_interval" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="waterLogs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="WaterLog" inverseName="plant" inverseEntity="WaterLog"/>
     </entity>
     <entity name="WaterLog" representedClassName="WaterLog" syncable="YES">
@@ -13,7 +12,7 @@
         <relationship name="plant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Plant" inverseName="waterLogs" inverseEntity="Plant"/>
     </entity>
     <elements>
-        <element name="Plant" positionX="-338.1328125" positionY="26.375" width="128" height="133"/>
+        <element name="Plant" positionX="-338.1328125" positionY="26.375" width="128" height="118"/>
         <element name="WaterLog" positionX="-63" positionY="18" width="128" height="73"/>
     </elements>
 </model>
