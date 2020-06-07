@@ -24,6 +24,7 @@ class CoreDataHelper {
     static func addPlant(name: String, sunTolerance: SunTolarance, waterRequirementInterval: Int, waterRequirementUnit: WaterRequirementUnit, to context: NSManagedObjectContext, saveOnCompletion: Bool = true) {
         
         let plant = Plant(context: context)
+        plant.id = UUID()
         plant.name = name
         plant.sun_tolerance = sunTolerance.rawValue
         plant.water_req_interval = Int64(waterRequirementInterval)
@@ -34,9 +35,8 @@ class CoreDataHelper {
         }
     }
     
-    static func editPlant(_ plant: Plant, name: String, sunTolerance: SunTolarance, waterRequirementInterval: Int, waterRequirementUnit: WaterRequirementUnit, to context: NSManagedObjectContext, saveOnCompletion: Bool = true) {
+    static func updatePlant(_ plant: Plant, name: String, sunTolerance: SunTolarance, waterRequirementInterval: Int, waterRequirementUnit: WaterRequirementUnit, to context: NSManagedObjectContext, saveOnCompletion: Bool = true) {
         
-        let plant = Plant(context: context)
         plant.name = name
         plant.sun_tolerance = sunTolerance.rawValue
         plant.water_req_interval = Int64(waterRequirementInterval)

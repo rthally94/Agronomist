@@ -13,14 +13,17 @@ struct PlantsListView: View {
     @FetchRequest(entity: Plant.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Plant.name, ascending: true)]) var plants: FetchedResults<Plant>
     @Environment(\.managedObjectContext) var moc
     
-    @State var showAddPlantForm: Bool = false
+    @State private var showAddPlantForm: Bool = false
     
-    @ViewBuilder
+    var plantNames: [String] {
+        return plants.map{$0.wrappedName}
+    }
+    
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottomLeading) {
                 if plants.count > 0 {
-                    List(plants, id: \.id ) { plant in
+                    List(plants, id: \.id) { plant in
                         NavigationLink(destination: PlantDetailView(plant: plant)) {
                             PlantsListRowView(plant: plant)
                                 .padding(.vertical, 5)
@@ -28,7 +31,11 @@ struct PlantsListView: View {
                     }
                     .listStyle(GroupedListStyle())
                     
-                    Button(action: {self.showAddPlantForm = true}, label: {
+                    Button(
+                        action: {
+                            self.showAddPlantForm = true
+                    },
+                        label: {
                         Image(systemName: "plus.circle.fill").font(.title)
                         Text("Add Plant").fontWeight(.semibold)
                     })

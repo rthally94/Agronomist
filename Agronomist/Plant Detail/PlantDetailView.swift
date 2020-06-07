@@ -89,9 +89,9 @@ struct PlantDetailView: View {
             onDismiss: {
                 self.editMode = false
         }) {
-            PlantForm(plant: self.plant, onDelete: { self.deletePlant() }) { name, sun, water_int, water_unit in
-                CoreDataHelper.editPlant(self.plant, name: name, sunTolerance: sun, waterRequirementInterval: water_int, waterRequirementUnit: water_unit, to: self.moc)
-            }
+            PlantForm(plant: self.plant, onDelete: { self.deletePlant() }, onSave: { name, sun, water_int, water_unit in
+                CoreDataHelper.updatePlant(self.plant, name: name, sunTolerance: sun, waterRequirementInterval: water_int, waterRequirementUnit: water_unit, to: self.moc)
+            })
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle("\(plant.name ?? "NO_NAME")", displayMode: .inline)

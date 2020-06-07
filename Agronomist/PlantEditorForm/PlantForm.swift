@@ -10,77 +10,25 @@ import SwiftUI
 import CoreData
 
 struct PlantForm: View {
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode) private var presentationMode
     
-    let isEditing: Bool
+    var isEditing: Bool = false
     
-    @State var name: String
+    @State var name: String = ""
     @State var sunTolerancePickerChoice: SunTolarance = .fullShade
     
-    @State var waterRequirementPickerIsVisible: Bool = false
-    @State var waterRequirementPickerIntervalChoice: Int
-    @State var waterRequirementPickerUnitChoice: WaterRequirementUnit
+    @State private var waterRequirementPickerIsVisible: Bool = false
+    @State var waterRequirementPickerIntervalChoice: Int = 1
+    @State var waterRequirementPickerUnitChoice: WaterRequirementUnit = .day
     
-    let onDelete: () -> Void
-    let onSave: (String, SunTolarance, Int, WaterRequirementUnit) -> Void
-    
-    // MARK: Initializers
-    
-    init(onDelete: @escaping () -> Void, onSave: @escaping (String, SunTolarance, Int, WaterRequirementUnit) -> Void) {
-        self.onDelete = onDelete
-        self.onSave = onSave
-        
-        self.isEditing = false
-        
-        _name = State(initialValue: "")
-        _sunTolerancePickerChoice = State(initialValue: .fullShade)
-        _waterRequirementPickerIntervalChoice = State(initialValue: 1)
-        _waterRequirementPickerUnitChoice = State(initialValue: .day)
-    }
-    
-    init(onSave: @escaping (String, SunTolarance, Int, WaterRequirementUnit) -> Void) {
-        self.onDelete = {}
-        self.onSave = onSave
-        
-        self.isEditing = false
-        
-        _name = State(initialValue: "")
-        _sunTolerancePickerChoice = State(initialValue: .fullShade)
-        _waterRequirementPickerIntervalChoice = State(initialValue: 1)
-        _waterRequirementPickerUnitChoice = State(initialValue: .day)
-    }
-    
-    init(plant: Plant, onDelete: @escaping () -> Void, onSave: @escaping (String, SunTolarance, Int, WaterRequirementUnit) -> Void) {
-        self.onDelete = onDelete
-        self.onSave = onSave
-        
-        isEditing = true
-        
-        let defName = ""
-        _name = State(initialValue: plant.name ?? defName)
-        _sunTolerancePickerChoice = State(initialValue: plant.wrappedSunTolerance)
-        _waterRequirementPickerIntervalChoice = State(initialValue: plant.wrapppedWaterRequirementInterval)
-        _waterRequirementPickerUnitChoice = State(initialValue: plant.wrappedWaterRequirementUnit)
-    }
-    
-    init(plant: Plant, onSave: @escaping (String, SunTolarance, Int, WaterRequirementUnit) -> Void) {
-        self.onDelete = {}
-        self.onSave = onSave
-        
-        isEditing = true
-        
-        let defName = ""
-        _name = State(initialValue: plant.name ?? defName)
-        _sunTolerancePickerChoice = State(initialValue: plant.wrappedSunTolerance)
-        _waterRequirementPickerIntervalChoice = State(initialValue: plant.wrapppedWaterRequirementInterval)
-        _waterRequirementPickerUnitChoice = State(initialValue: plant.wrappedWaterRequirementUnit)
-    }
+    var onDelete: () -> Void = {}
+    var onSave: (String, SunTolarance, Int, WaterRequirementUnit) -> Void = { _, _, _, _ in }
     
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("General")) {
-                    TextField("Name", text: $name)
+                    TextField("Name", text: Binding(get: {self.name}, set: { (val) in self.name = val.capitalized}))
                 }
                 
                 Section(header: Text("Climate")) {
@@ -148,7 +96,7 @@ struct PlantForm: View {
         }
     }
     
-    var wateringForm: some View {
+    private var wateringForm: some View {
         VStack(alignment: .leading) {
             HStack {
                 Picker("Interval", selection: Binding(
@@ -204,23 +152,23 @@ struct PlantForm: View {
     
     // MARK: Exposed Properties
     
-    var waterRequirementCalendarPicker: [String] {
+    private var waterRequirementCalendarPicker: [String] {
         return waterRequirementUnits
     }
     
-    var waterRequirementIntervalPicker: [String] {
+    private var waterRequirementIntervalPicker: [String] {
         return waterRequirementInterval.map{"\($0)".capitalized}
     }
     
-    var currentWaterRequirementTextLong: String {
+    private var currentWaterRequirementTextLong: String {
         return "Watering reminder will be \(currentWaterRequirementTextShort)."
     }
     
-    var currentWaterRequirementTextShort: String {
+    private var currentWaterRequirementTextShort: String {
         return "every \(waterRequirementPickerIntervalChoice) \(waterRequirementPickerUnitChoice.rawValue)".appending(waterRequirementPickerIntervalChoice != 1 ? "s" : "")
     }
     
-    private var relativeDateFormatter: RelativeDateTimeFormatter = {
+    private let relativeDateFormatter: RelativeDateTimeFormatter = {
         let rdtf = RelativeDateTimeFormatter()
         
         rdtf.dateTimeStyle = .numeric
@@ -228,7 +176,7 @@ struct PlantForm: View {
         return rdtf
     }()
     
-    private var dateFormatter: DateFormatter = {
+    private let dateFormatter: DateFormatter = {
         let dcf = DateFormatter()
         
         dcf.dateStyle = .short
@@ -254,8 +202,14 @@ struct PlantForm: View {
 
 struct PlantEditorForm_Previews: PreviewProvider {
     static var previews: some View {
-        PlantForm { _, _, _, _ in
-            
-        }
+        PlantForm()
+    }
+}
+
+extension PlantForm {
+    init(plant: Plant, onDelete: @escaping () -> Void, onSave: @escaping (String, SunTolarance, Int, WaterRequirementUnit) -> Void) {
+        self.init(name: plant.wrappedName, sunTolerancePickerChoice: plant.wrappedSunTolerance, waterRequirementPickerIntervalChoice: plant.wrapppedWaterRequirementInterval, waterRequirementPickerUnitChoice: plant.wrappedWaterRequirementUnit, onDelete: onDelete, onSave: onSave)
+        
+        self.isEditing = true
     }
 }

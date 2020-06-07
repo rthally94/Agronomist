@@ -35,7 +35,7 @@ struct PlantWateringTodayView: View {
                 List {
                     if plantsNeedingWater.count > 0 {
                         Section(header: Text(plantWateringHeaderString).font(.body).fontWeight(.semibold)) {
-                            ForEach(plantsNeedingWater, id: \.name) { plant in
+                            ForEach(plantsNeedingWater, id: \Plant.name) { plant in
                                 PlantTodayViewListRow(plant: plant) {
                                     CoreDataHelper.addWaterLog(date: Date(), to: plant, in: self.moc)
                                 }
