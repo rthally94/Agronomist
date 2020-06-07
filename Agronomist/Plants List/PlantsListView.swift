@@ -23,6 +23,7 @@ struct PlantsListView: View {
                     List(plants, id: \.id ) { plant in
                         NavigationLink(destination: PlantDetailView(plant: plant)) {
                             PlantsListRowView(plant: plant)
+                                .padding(.vertical, 5)
                         }
                     }
                     .listStyle(GroupedListStyle())
@@ -53,12 +54,13 @@ struct PlantsListView: View {
             .navigationBarHidden(plants.count == 0)
             .navigationBarTitle("Plants")
             .sheet(isPresented: $showAddPlantForm, onDismiss: {self.showAddPlantForm = false}) {
-                PlantForm { name, sun, water_int in
+                PlantForm { name, sun, water_int, water_unit in
                     let newPlant = Plant(context: self.moc)
                     newPlant.id = UUID()
                     newPlant.name = name
                     newPlant.sun_tolerance = sun
-                    newPlant.water_req_interval = water_int
+                    newPlant.water_req_interval = Int64(water_int)
+                    newPlant.water_req_unit = water_unit
                     
                     self.saveContext()
                 }

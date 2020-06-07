@@ -11,6 +11,7 @@ import CoreData
 
 struct PlantWateringTodayView: View {
     @FetchRequest(entity: Plant.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Plant.name, ascending: true)]) var plants: FetchedResults<Plant>
+    @Environment(\.managedObjectContext) var moc
     
     var plantsNeedingWater: [Plant] {
         return plants.filter { plant in
@@ -18,29 +19,62 @@ struct PlantWateringTodayView: View {
         }
     }
     
-    @ViewBuilder
-    var body: some View {
-        if plantsNeedingWater.count > 0 {
-            List {
-                Section(header: Text("Needs Water")) {
-                    ForEach(plantsNeedingWater, id: \.name) { plant in
-                        PlantTodayViewListRow(plant: plant)
-                    }
-                }
-            }
-            .listStyle(GroupedListStyle())
+    var plantWateringHeaderString: String {
+        if plantsNeedingWater.count == 1 {
+            return "\(plantsNeedingWater.count) plant needs watering today."
         } else {
-            VStack {
-                CardView {
-                    VStack {
-                        Image(systemName: "checkmark.circle.fill").font(.largeTitle)
-                        Text("All Set!").font(.largeTitle)
-                        Text("No plants need watering")
+            return "\(plantsNeedingWater.count) plants need watering today."
+        }
+    }
+    
+    private func saveContext() {
+        if moc.hasChanges {
+            do {
+                try moc.save()
+            } catch {
+                print("Erro saving context: \(error)")
+            }
+        }
+    }
+    
+    @State var tableIsVisible: Bool = false
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                List {
+                    if plantsNeedingWater.count > 0 {
+                        Section(header: Text(plantWateringHeaderString).font(.body).fontWeight(.semibold)) {
+                            ForEach(plantsNeedingWater, id: \.name) { plant in
+                                PlantTodayViewListRow(plant: plant) {
+                                    let log = WaterLog(context: self.moc)
+                                    log.date = Date()
+                                    plant.addToWaterLogs(log)
+                                    
+                                    self.saveContext()
+                                }
+                            }
+                        }
                     }
                 }
-                .foregroundColor(.blue)
-                .padding()
+                .listStyle(GroupedListStyle())
+                
+                if plantsNeedingWater.count == 0 {
+                    VStack {
+                        CardView {
+                            VStack {
+                                Image(systemName: "checkmark.circle.fill").font(.largeTitle)
+                                Text("All Set!").font(.largeTitle)
+                                Text("No plants need watering")
+                            }
+                        }
+                        .foregroundColor(.blue)
+                        .padding()
+                    }
+                    .transition(.scale)
+                }
             }
+            .navigationBarTitle("Today")
         }
     }
 }

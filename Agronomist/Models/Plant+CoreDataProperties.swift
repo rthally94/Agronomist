@@ -2,7 +2,7 @@
 //  Plant+CoreDataProperties.swift
 //  Agronomist
 //
-//  Created by Ryan Thally on 6/4/20.
+//  Created by Ryan Thally on 6/6/20.
 //  Copyright © 2020 Ryan Thally. All rights reserved.
 //
 //
@@ -20,7 +20,8 @@ extension Plant {
     @NSManaged public var id: UUID?
     @NSManaged public var name: String?
     @NSManaged public var sun_tolerance: String?
-    @NSManaged public var water_req_interval: Date?
+    @NSManaged public var water_req_interval: Int64
+    @NSManaged public var water_req_unit: String?
     @NSManaged public var waterLogs: NSSet?
 
 }

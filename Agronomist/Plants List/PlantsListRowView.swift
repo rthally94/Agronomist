@@ -29,8 +29,9 @@ struct PlantsListRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(plant.wrappedName)
-            Text(lastLoggedString).font(.caption)
+            Text(plant.wrappedName).font(.headline)
+            Spacer()
+            Text(lastLoggedString).font(.subheadline)
         }
     }
 }
@@ -42,7 +43,8 @@ struct PlantListRowView_Previews: PreviewProvider {
         plant.id = UUID()
         plant.name = "My New Plant"
         plant.sun_tolerance = "part_shade"
-        plant.water_req_interval = Date()
+        plant.water_req_interval = 1
+        plant.water_req_unit = "day"
         
         return PlantsListRowView(plant: plant)
     }

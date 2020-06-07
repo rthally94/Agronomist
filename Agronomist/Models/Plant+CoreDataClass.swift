@@ -20,46 +20,26 @@ public class Plant: NSManagedObject {
         return SunTolarance.init(rawValue: sun_tolerance ?? "") ?? SunTolarance.fullShade
     }
     
-    var wrapppedWaterRequirementInterval: Date {
-        return water_req_interval ?? Date()
+    var wrapppedWaterRequirementInterval: Int {
+        return Int(water_req_interval)
     }
     
-    var waterRequirementValue: Int {
-        let cal = Calendar(identifier: .iso8601)
-        let components = cal.dateComponents([.year, .month, . day], from: wrapppedWaterRequirementInterval)
-        
-        if let year = components.year, year > 0 {
-            return year
-        } else if let month = components.month, month > 0 {
-            return month
-        } else if let day = components.day, day > 0 {
-            return day
-        } else {
-            return 0
-        }
-    }
-    
-    var waterRequirementUnit: String {
-        let cal = Calendar(identifier: .iso8601)
-        let components = cal.dateComponents([.year, .month, . day], from: wrapppedWaterRequirementInterval)
-        
-        if let year = components.year, year > 0 {
-            return "year"
-        } else if let month = components.month, month > 0 {
-            return "month"
-        } else if let day = components.day, day >  6 {
-            return "week"
-        } else if let day = components.day, day > 0 {
-            return "day"
-        } else {
-            return "none"
-        }
+    var wrappedWaterRequirementUnit: WaterRequirementUnit {
+        return WaterRequirementUnit(rawValue: water_req_unit ?? "") ?? .day
     }
     
     var wateringIsNeeded: Bool {
         if let latestWaterLog = latestWaterLog {
-            let wateringInterval = DateInterval(start: latestWaterLog.wrappedDate, end: wrapppedWaterRequirementInterval)
-            let nextWateringDate = Date(timeInterval: wateringInterval.duration, since: latestWaterLog.wrappedDate)
+            let wateringInterval: DateComponents = {
+                switch wrappedWaterRequirementUnit {
+                case .day: return DateComponents(day: wrapppedWaterRequirementInterval)
+                case .week: return DateComponents(day: wrapppedWaterRequirementInterval * 7)
+                case .month: return DateComponents(month: wrapppedWaterRequirementInterval)
+                case .year: return DateComponents(year: wrapppedWaterRequirementInterval)
+                }
+            }()
+            
+            let nextWateringDate = latestWaterLog.wrappedDate + DateInterval(start: latestWaterLog.wrappedDate, end: wateringInterval.date ?? Date()).duration
             return nextWateringDate > Date()
         }
         else {

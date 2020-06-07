@@ -27,22 +27,30 @@ struct PlantTodayViewListRow: View {
         } else {
             return "Not watered yet."
         }
-            
+        
     }
     
+    var onComplete: () -> Void = {}
+    
     var body: some View {
-        HStack {
-            WaterIcon()
-                .frame(width: iconSize, height: iconSize)
+        HStack(alignment: .center) {
+            Button(
+                action: onComplete,
+                label: {
+                    WaterIcon()
+                        .frame(width: iconSize, height: iconSize)
+                }).buttonStyle(PlainButtonStyle())
             VStack(alignment: .leading) {
-                Text(self.plant.wrappedName)
-                Text(self.lastWateredText)
+                Text(self.plant.wrappedName).font(.headline)
+                Spacer()
+                Text(self.lastWateredText).font(.subheadline)
             }
-        }.frame(minWidth: .zero, maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(minWidth: .zero, maxWidth: .infinity, alignment: .leading)
     }
     
     // MARK: Drawing Contstants
-    let iconSize: CGFloat = 35
+    let iconSize: CGFloat = 45
 }
 
 struct PlantTodayViewListRow_Previews: PreviewProvider {

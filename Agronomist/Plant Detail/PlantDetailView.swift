@@ -33,33 +33,39 @@ struct PlantDetailView: View {
     
     var detailContent: some View {
         List {
-            Section {
-                plant.name.map(Text.init)
-                VStack(alignment: .leading) {
-                    Text("Last Watered").font(.caption)
-                    Text(lastLoggedString)
+            VStack {
+                Text(plant.wrappedName).font(.title).fontWeight(.semibold).padding()
+                Text(nextWateringText)
+                HStack {
+                    Spacer()
                 }
-                
             }
             
             Section(header: Text("Growing Conditions")) {
                 VStack(alignment: .leading) {
-                    Text("Sun Tolerance").font(.caption)
-                    plant.sun_tolerance.map(formatForDisplay).map(Text.init)
+                    Text("Sun Tolerance").font(.caption).padding(.bottom)
+                    Text(SunTolarance.formattedTitle(for: plant.wrappedSunTolerance)).font(.headline)
+                    Text(SunTolarance.description(for: plant.wrappedSunTolerance)).font(.subheadline)
                 }
                 
                 VStack(alignment: .leading) {
-                    Text("Water Requirements").font(.caption)
+                    Text("Water Requirements").font(.caption).padding(.bottom)
                     HStack {
-// TODO : Add Formatter                        Text("\(plant.water_req_interval)")
-                        Text("fda")
+                        Text("\(waterRequirementText)")
                     }
                 }
             }
             
             Section(header: Text("Water Logs")) {
-                ForEach(plant.waterLogArray, id: \.wrappedDate) { log in
-                    Text(self.dateFormatter.string(from: log.wrappedDate))
+                if plant.waterLogArray.count > 0 {
+                    ForEach(plant.waterLogArray, id: \.wrappedDate) { log in
+                        Text(self.dateFormatter.string(from: log.wrappedDate))
+                            .onLongPressGesture {
+                                self.plant.removeFromWaterLogs(log)
+                        }
+                    }
+                } else {
+                    Text("No water logs recorded yet")
                 }
             }
         }
@@ -87,10 +93,11 @@ struct PlantDetailView: View {
             onDismiss: {
                 self.editMode = false
         }) {
-            PlantForm(plant: self.plant, onDelete: { self.deletePlant() }) { name, sun, water_int in
+            PlantForm(plant: self.plant, onDelete: { self.deletePlant() }) { name, sun, water_int, water_unit in
                 self.plant.name = name
                 self.plant.sun_tolerance = sun
-                self.plant.water_req_interval = water_int
+                self.plant.water_req_interval = Int64(water_int)
+                self.plant.water_req_unit = water_unit
                 
                 self.saveContext()
             }
@@ -102,6 +109,42 @@ struct PlantDetailView: View {
     
     func formatForDisplay(_ input: String) -> String {
         return input.replacingOccurrences(of: "|", with: " ").replacingOccurrences(of: "_", with: " ").capitalized
+    }
+    
+    // MARK: Helper Functions
+    
+    private let relativeDateFormatter: RelativeDateTimeFormatter = {
+        let rdtf = RelativeDateTimeFormatter()
+        
+        rdtf.dateTimeStyle = .named
+        
+        return rdtf
+    }()
+    
+    var nextWateringText: String {
+        if let lastWatering = plant.latestWaterLog?.wrappedDate {
+            let calendar = Calendar.init(identifier: .iso8601)
+            let nextWatering: Date = {
+                switch plant.wrappedWaterRequirementUnit {
+                case .day:
+                    return calendar.date(byAdding: .day, value: plant.wrapppedWaterRequirementInterval, to: lastWatering) ?? Date()
+                case .week:
+                    return calendar.date(byAdding: .day, value: plant.wrapppedWaterRequirementInterval * 7, to: lastWatering) ?? Date()
+                case .month:
+                    return calendar.date(byAdding: .month, value: plant.wrapppedWaterRequirementInterval, to: lastWatering) ?? Date()
+                case .year:
+                    return calendar.date(byAdding: .year, value: plant.wrapppedWaterRequirementInterval, to: lastWatering) ?? Date()
+                }
+            }()
+            
+            return "Next watering \(relativeDateFormatter.localizedString(for: nextWatering, relativeTo: lastWatering).replacingOccurrences(of: "now", with: "today"))"
+        }
+        
+        return "Initial watering today"
+    }
+    
+    var waterRequirementText: String {
+        return "Every \(plant.wrapppedWaterRequirementInterval) \(plant.wrappedWaterRequirementUnit)".appending(plant.wrapppedWaterRequirementInterval != 1 ? "s" : "")
     }
     
     // MARK: Intents
