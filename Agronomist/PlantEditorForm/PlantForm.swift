@@ -22,11 +22,11 @@ struct PlantForm: View {
     @State var waterRequirementPickerUnitChoice: WaterRequirementUnit
     
     let onDelete: () -> Void
-    let onSave: (String, String, Int, String) -> Void
+    let onSave: (String, SunTolarance, Int, WaterRequirementUnit) -> Void
     
     // MARK: Initializers
     
-    init(onDelete: @escaping () -> Void, onSave: @escaping (String, String, Int, String) -> Void) {
+    init(onDelete: @escaping () -> Void, onSave: @escaping (String, SunTolarance, Int, WaterRequirementUnit) -> Void) {
         self.onDelete = onDelete
         self.onSave = onSave
         
@@ -38,7 +38,7 @@ struct PlantForm: View {
         _waterRequirementPickerUnitChoice = State(initialValue: .day)
     }
     
-    init(onSave: @escaping (String, String, Int, String) -> Void) {
+    init(onSave: @escaping (String, SunTolarance, Int, WaterRequirementUnit) -> Void) {
         self.onDelete = {}
         self.onSave = onSave
         
@@ -50,7 +50,7 @@ struct PlantForm: View {
         _waterRequirementPickerUnitChoice = State(initialValue: .day)
     }
     
-    init(plant: Plant, onDelete: @escaping () -> Void, onSave: @escaping (String, String, Int, String) -> Void) {
+    init(plant: Plant, onDelete: @escaping () -> Void, onSave: @escaping (String, SunTolarance, Int, WaterRequirementUnit) -> Void) {
         self.onDelete = onDelete
         self.onSave = onSave
         
@@ -63,7 +63,7 @@ struct PlantForm: View {
         _waterRequirementPickerUnitChoice = State(initialValue: plant.wrappedWaterRequirementUnit)
     }
     
-    init(plant: Plant, onSave: @escaping (String, String, Int, String) -> Void) {
+    init(plant: Plant, onSave: @escaping (String, SunTolarance, Int, WaterRequirementUnit) -> Void) {
         self.onDelete = {}
         self.onSave = onSave
         
@@ -136,9 +136,9 @@ struct PlantForm: View {
                 trailing: Button("Save", action: {
                     self.onSave(
                         self.name == "" ? "Plant \(self.dateFormatter.string(from: Date()))" : self.name,
-                        self.sunTolerancePickerChoice.rawValue,
+                        self.sunTolerancePickerChoice,
                         self.waterRequirementPickerIntervalChoice,
-                        self.waterRequirementPickerUnitChoice.rawValue
+                        self.waterRequirementPickerUnitChoice
                     )
                     
                     self.dismiss()

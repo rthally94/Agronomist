@@ -27,16 +27,6 @@ struct PlantWateringTodayView: View {
         }
     }
     
-    private func saveContext() {
-        if moc.hasChanges {
-            do {
-                try moc.save()
-            } catch {
-                print("Erro saving context: \(error)")
-            }
-        }
-    }
-    
     @State var tableIsVisible: Bool = false
     
     var body: some View {
@@ -47,11 +37,7 @@ struct PlantWateringTodayView: View {
                         Section(header: Text(plantWateringHeaderString).font(.body).fontWeight(.semibold)) {
                             ForEach(plantsNeedingWater, id: \.name) { plant in
                                 PlantTodayViewListRow(plant: plant) {
-                                    let log = WaterLog(context: self.moc)
-                                    log.date = Date()
-                                    plant.addToWaterLogs(log)
-                                    
-                                    self.saveContext()
+                                    CoreDataHelper.addWaterLog(date: Date(), to: plant, in: self.moc)
                                 }
                             }
                         }

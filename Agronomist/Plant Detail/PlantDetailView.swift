@@ -76,11 +76,7 @@ struct PlantDetailView: View {
             detailContent
             Button(
                 action: {
-                    let log = WaterLog(context: self.moc)
-                    log.date = Date()
-                    self.plant.addToWaterLogs(log)
-                    
-                    self.saveContext()
+                    CoreDataHelper.addWaterLog(date: Date(), to: self.plant, in: self.moc)
             },
                 label: {
                     Text("Log Water")
@@ -94,12 +90,7 @@ struct PlantDetailView: View {
                 self.editMode = false
         }) {
             PlantForm(plant: self.plant, onDelete: { self.deletePlant() }) { name, sun, water_int, water_unit in
-                self.plant.name = name
-                self.plant.sun_tolerance = sun
-                self.plant.water_req_interval = Int64(water_int)
-                self.plant.water_req_unit = water_unit
-                
-                self.saveContext()
+                CoreDataHelper.editPlant(self.plant, name: name, sunTolerance: sun, waterRequirementInterval: water_int, waterRequirementUnit: water_unit, to: self.moc)
             }
         }
         .listStyle(GroupedListStyle())
@@ -113,34 +104,8 @@ struct PlantDetailView: View {
     
     // MARK: Helper Functions
     
-    private let relativeDateFormatter: RelativeDateTimeFormatter = {
-        let rdtf = RelativeDateTimeFormatter()
-        
-        rdtf.dateTimeStyle = .named
-        
-        return rdtf
-    }()
-    
     var nextWateringText: String {
-        if let lastWatering = plant.latestWaterLog?.wrappedDate {
-            let calendar = Calendar.init(identifier: .iso8601)
-            let nextWatering: Date = {
-                switch plant.wrappedWaterRequirementUnit {
-                case .day:
-                    return calendar.date(byAdding: .day, value: plant.wrapppedWaterRequirementInterval, to: lastWatering) ?? Date()
-                case .week:
-                    return calendar.date(byAdding: .day, value: plant.wrapppedWaterRequirementInterval * 7, to: lastWatering) ?? Date()
-                case .month:
-                    return calendar.date(byAdding: .month, value: plant.wrapppedWaterRequirementInterval, to: lastWatering) ?? Date()
-                case .year:
-                    return calendar.date(byAdding: .year, value: plant.wrapppedWaterRequirementInterval, to: lastWatering) ?? Date()
-                }
-            }()
-            
-            return "Next watering \(relativeDateFormatter.localizedString(for: nextWatering, relativeTo: lastWatering).replacingOccurrences(of: "now", with: "today"))"
-        }
-        
-        return "Initial watering today"
+        Formatter.nextWateringText(for: plant)
     }
     
     var waterRequirementText: String {
@@ -150,20 +115,8 @@ struct PlantDetailView: View {
     // MARK: Intents
     
     private func deletePlant() {
-        print("Delete Pressed")
-        moc.delete(plant)
-        self.saveContext()
+        CoreDataHelper.deletePlant(plant, from: moc)
         presentationMode.wrappedValue.dismiss()
-    }
-    
-    private func saveContext() {
-        if moc.hasChanges {
-            do {
-                try moc.save()
-            } catch {
-                print("Cannot save context: \(error)")
-            }
-        }
     }
 }
 

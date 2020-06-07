@@ -55,25 +55,8 @@ struct PlantsListView: View {
             .navigationBarTitle("Plants")
             .sheet(isPresented: $showAddPlantForm, onDismiss: {self.showAddPlantForm = false}) {
                 PlantForm { name, sun, water_int, water_unit in
-                    let newPlant = Plant(context: self.moc)
-                    newPlant.id = UUID()
-                    newPlant.name = name
-                    newPlant.sun_tolerance = sun
-                    newPlant.water_req_interval = Int64(water_int)
-                    newPlant.water_req_unit = water_unit
-                    
-                    self.saveContext()
+                    CoreDataHelper.addPlant(name: name, sunTolerance: sun, waterRequirementInterval: water_int, waterRequirementUnit: water_unit, to: self.moc)
                 }
-            }
-        }
-    }
-    
-    private func saveContext() {
-        if moc.hasChanges {
-            do {
-                try moc.save()
-            } catch {
-                print("Cannot save context: \(error)")
             }
         }
     }
