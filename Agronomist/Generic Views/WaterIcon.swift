@@ -14,8 +14,11 @@ struct WaterIcon: View, Icon {
             ZStack {
                 Circle()
                     .foregroundColor(.blue)
-                Text("💧").font(self.font(for: geometry.size))
-            }.rotationEffect(.degrees(-30))
+                Image("drop")
+                    .resizable()
+                    .scaleEffect(0.5)
+                    .saturation(0.0)
+            }
         }
     }
     
