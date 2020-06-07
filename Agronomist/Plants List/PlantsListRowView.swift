@@ -28,10 +28,15 @@ struct PlantsListRowView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(plant.wrappedName).font(.headline)
+        HStack {
+            VStack(alignment: .leading) {
+                Text(plant.wrappedName).font(.headline)
+                Spacer()
+                Text(lastLoggedString).font(.subheadline)
+            }
             Spacer()
-            Text(lastLoggedString).font(.subheadline)
+            
+            Image(systemName: "checkmark")
         }
     }
 }

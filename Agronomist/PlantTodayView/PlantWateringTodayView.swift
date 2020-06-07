@@ -19,6 +19,12 @@ struct PlantWateringTodayView: View {
         }
     }
     
+    @State var wateredPlants = [Plant]()
+    
+    var mergedPlantLists: [Plant] {
+        return (plantsNeedingWater + wateredPlants).sorted(by: {$0.wrappedName < $1.wrappedName})
+    }
+    
     var plantWateringHeaderString: String {
         if plantsNeedingWater.count == 1 {
             return "\(plantsNeedingWater.count) plant needs watering today."
@@ -28,39 +34,58 @@ struct PlantWateringTodayView: View {
     }
     
     @State var tableIsVisible: Bool = false
+    private var listPlaceHolderIsVisible: Bool {
+        return mergedPlantLists.count == 0
+    }
     
     var body: some View {
         NavigationView {
             ZStack {
-                List {
-                    if plantsNeedingWater.count > 0 {
-                        Section(header: Text(plantWateringHeaderString).font(.body).fontWeight(.semibold)) {
-                            ForEach(plantsNeedingWater, id: \Plant.name) { plant in
-                                PlantTodayViewListRow(plant: plant) {
-                                    CoreDataHelper.addWaterLog(date: Date(), to: plant, in: self.moc)
+                if !listPlaceHolderIsVisible {
+                    SectionView(label: plantWateringHeaderString) {
+                        ScrollView {
+                            ForEach(mergedPlantLists, id: \Plant.name) { plant in
+                                PlantTodayViewListRow(plant: plant) { isMarked in
+                                    if isMarked {
+                                        self.wateredPlants.append(plant)
+                                        CoreDataHelper.addWaterLog(date: Date(), to: plant, in: self.moc)
+                                    } else {
+                                        if let index = self.wateredPlants.firstIndex(of: plant) {
+                                            self.wateredPlants.remove(at: index)
+                                        }
+                                        
+                                        if let log = plant.waterLogArray.first {
+                                            CoreDataHelper.deleteWaterLog(log, from: plant, in: self.moc)
+                                        }
+                                    }
                                 }
                             }
+                            
                         }
                     }
+                    .padding(.horizontal)
                 }
-                .listStyle(GroupedListStyle())
                 
-                if plantsNeedingWater.count == 0 {
-                    VStack {
+                if listPlaceHolderIsVisible {
+                    ZStack {
                         CardView {
                             VStack {
                                 Image(systemName: "checkmark.circle.fill").font(.largeTitle)
                                 Text("All Set!").font(.largeTitle)
-                                Text("No plants need watering")
+                                Text("No plants need watering today")
                             }
                         }
                         .foregroundColor(.blue)
                         .padding()
                     }
-                    .transition(.scale)
+                    .transition(AnyTransition.scale.animation(.spring()))
                 }
             }
+            .onAppear {
+                self.wateredPlants.removeAll()
+            }
             .navigationBarTitle("Today")
+            .navigationBarHidden(listPlaceHolderIsVisible)
         }
     }
 }

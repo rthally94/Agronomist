@@ -20,6 +20,7 @@
 		FB8634CC2489BC5F004A9112 /* WaterLog+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8634CA2489BC5F004A9112 /* WaterLog+CoreDataProperties.swift */; };
 		FB947F1B248D0EBE00247F8B /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB947F1A248D0EBE00247F8B /* Formatter.swift */; };
 		FB947F1D248D115800247F8B /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB947F1C248D115800247F8B /* CoreDataHelper.swift */; };
+		FB947F1F248D469100247F8B /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB947F1E248D469100247F8B /* SectionView.swift */; };
 		FBC024A524853DAD0006EF39 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC024A424853DAD0006EF39 /* AppDelegate.swift */; };
 		FBC024A724853DAD0006EF39 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC024A624853DAD0006EF39 /* SceneDelegate.swift */; };
 		FBC024AA24853DAD0006EF39 /* Agronomist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FBC024A824853DAD0006EF39 /* Agronomist.xcdatamodeld */; };
@@ -49,6 +50,7 @@
 		FB8634CA2489BC5F004A9112 /* WaterLog+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WaterLog+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FB947F1A248D0EBE00247F8B /* Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
 		FB947F1C248D115800247F8B /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
+		FB947F1E248D469100247F8B /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		FBC024A124853DAD0006EF39 /* Agronomist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Agronomist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBC024A424853DAD0006EF39 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FBC024A624853DAD0006EF39 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				FB1A468E248A786A0078AC88 /* WaterIcon.swift */,
 				FB1A4694248AC8740078AC88 /* Icon.swift */,
 				FB1A4696248AC9560078AC88 /* AddIcon.swift */,
+				FB947F1E248D469100247F8B /* SectionView.swift */,
 			);
 			path = "Generic Views";
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 				FB947F1D248D115800247F8B /* CoreDataHelper.swift in Sources */,
 				FBD97DF6248BD67A0021136B /* SunTolarance.swift in Sources */,
 				FB1A468A248A66A30078AC88 /* PlantWateringTodayView.swift in Sources */,
+				FB947F1F248D469100247F8B /* SectionView.swift in Sources */,
 				FBC024AC24853DAD0006EF39 /* ContentView.swift in Sources */,
 				FBD97DF8248BEA7A0021136B /* WaterRequirementUnit.swift in Sources */,
 				FBC024A724853DAD0006EF39 /* SceneDelegate.swift in Sources */,

@@ -28,6 +28,10 @@ public class Plant: NSManagedObject {
         return WaterRequirementUnit(rawValue: water_req_unit ?? "") ?? .day
     }
     
+    var wrappedWaterRequirementNote: String {
+        return water_req_note ?? ""
+    }
+    
     var wateringIsNeeded: Bool {
         if let latestWaterLog = latestWaterLog {
             let wateringInterval: DateComponents = {

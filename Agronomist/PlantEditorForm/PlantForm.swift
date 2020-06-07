@@ -83,7 +83,7 @@ struct PlantForm: View {
                 },
                 trailing: Button("Save", action: {
                     self.onSave(
-                        self.name == "" ? "Plant \(self.dateFormatter.string(from: Date()))" : self.name,
+                        self.name == "" ? "New Plant" : self.name,
                         self.sunTolerancePickerChoice,
                         self.waterRequirementPickerIntervalChoice,
                         self.waterRequirementPickerUnitChoice
@@ -167,23 +167,6 @@ struct PlantForm: View {
     private var currentWaterRequirementTextShort: String {
         return "every \(waterRequirementPickerIntervalChoice) \(waterRequirementPickerUnitChoice.rawValue)".appending(waterRequirementPickerIntervalChoice != 1 ? "s" : "")
     }
-    
-    private let relativeDateFormatter: RelativeDateTimeFormatter = {
-        let rdtf = RelativeDateTimeFormatter()
-        
-        rdtf.dateTimeStyle = .numeric
-        
-        return rdtf
-    }()
-    
-    private let dateFormatter: DateFormatter = {
-        let dcf = DateFormatter()
-        
-        dcf.dateStyle = .short
-        dcf.timeStyle = .short
-        
-        return dcf
-    }()
     
     // MARK: Picker Constants
     private var sunTolerancePickerStates: [SunTolarance] {

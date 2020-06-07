@@ -22,6 +22,8 @@ extension Plant {
     @NSManaged public var sun_tolerance: String?
     @NSManaged public var water_req_interval: Int64
     @NSManaged public var water_req_unit: String?
+    @NSManaged public var water_req_note: String?
+    
     @NSManaged public var waterLogs: NSSet?
 
 }

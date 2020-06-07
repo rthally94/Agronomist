@@ -14,7 +14,9 @@ struct PlantDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject var plant: Plant
-    @State var editMode: Bool = false
+    @State private var editMode: Bool = false
+    @State private var showDeleteAlert: Bool = false
+    @State private var indexSetToDelete: IndexSet?
     
     let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -60,15 +62,32 @@ struct PlantDetailView: View {
                 if plant.waterLogArray.count > 0 {
                     ForEach(plant.waterLogArray, id: \.wrappedDate) { log in
                         Text(self.dateFormatter.string(from: log.wrappedDate))
-                            .onLongPressGesture {
-                                self.plant.removeFromWaterLogs(log)
-                        }
                     }
+                    .onDelete(perform: delete)
+                .alert(isPresented: $showDeleteAlert, content: {
+                    Alert(
+                        title: Text("Are you sure?"),
+                        message: Text("This action cannot be undone."),
+                        primaryButton: .destructive(
+                            Text("Delete"),
+                            action: {
+                                if let index = self.indexSetToDelete?.first {
+                                    let log = self.plant.waterLogArray[index]
+                                    CoreDataHelper.deleteWaterLog(log, from: self.plant, in: self.moc)
+                                }
+                        }),
+                        secondaryButton: .cancel())
+                })
                 } else {
                     Text("No water logs recorded yet")
                 }
             }
         }
+    }
+    
+    func delete(at offset: IndexSet) {
+        self.indexSetToDelete = offset
+        self.showDeleteAlert = true
     }
     
     var body: some View {

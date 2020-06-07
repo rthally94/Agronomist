@@ -21,6 +21,7 @@ class CoreDataHelper {
         }
     }
     
+    // MARK: Plant CRUD
     static func addPlant(name: String, sunTolerance: SunTolarance, waterRequirementInterval: Int, waterRequirementUnit: WaterRequirementUnit, to context: NSManagedObjectContext, saveOnCompletion: Bool = true) {
         
         let plant = Plant(context: context)
@@ -56,11 +57,30 @@ class CoreDataHelper {
         
     }
     
+    // MARK: Water Log CRUD
+    
     static func addWaterLog(date: Date, to plant: Plant, in context: NSManagedObjectContext, saveOnCompletion: Bool = true) {
         let log = WaterLog(context: context)
         log.date = date
         
         plant.addToWaterLogs(log)
+        
+        if saveOnCompletion {
+            save(context)
+        }
+    }
+    
+    static func updateWaterLog(_ log: WaterLog, date: Date, in context: NSManagedObjectContext, saveOnCompletion: Bool = true) {
+        log.date = date
+        
+        if saveOnCompletion {
+            save(context)
+        }
+    }
+    
+    static func deleteWaterLog(_ log: WaterLog, from plant: Plant, in context: NSManagedObjectContext, saveOnCompletion: Bool = true) {
+        
+        plant.removeFromWaterLogs(log)
         
         if saveOnCompletion {
             save(context)

@@ -10,47 +10,79 @@ import SwiftUI
 import CoreData
 
 struct PlantTodayViewListRow: View {
+    
+    @State var isMarkedOff: Bool = false
+    
     var plant: Plant
     
-    private let dateFormatter: DateIntervalFormatter = {
-        let dif = DateIntervalFormatter()
-        
-        dif.dateStyle = .full
-        
-        return dif
-    }()
-    
     var lastWateredText: String {
-        if let lastWaterLog = plant.waterLogArray.first {
-            let interval = DateInterval(start: Date(), end: lastWaterLog.wrappedDate)
-            return "Watered \(String(describing: dateFormatter.string(from: interval)))"
-        } else {
-            return "Not watered yet."
-        }
-        
+        Formatter.lastWateringText(for: plant)
     }
     
-    var onComplete: () -> Void = {}
+    var onMarkPress: (Bool) -> Void = {_ in}
     
     var body: some View {
         HStack(alignment: .center) {
-            Button(
-                action: onComplete,
-                label: {
-                    WaterIcon()
-                        .frame(width: iconSize, height: iconSize)
-                }).buttonStyle(PlainButtonStyle())
+            WaterIcon()
+                .foregroundColor(.white)
+                .opacity(isMarkedOff ? 0.5 : 1.0)
+                .frame(width: iconSize, height: iconSize)
+            
             VStack(alignment: .leading) {
-                Text(self.plant.wrappedName).font(.headline)
+                plantNameText
                 Spacer()
-                Text(self.lastWateredText).font(.subheadline)
+                plantLastWateredText
             }
+            
+            Spacer()
+            
+            Button(
+                action: {
+                    withAnimation {
+                        self.isMarkedOff.toggle()
+                        self.onMarkPress(self.isMarkedOff)
+                    }
+            },
+                label: {
+                    if isMarkedOff {
+                        Image(systemName: "checkmark.square").resizable().scaledToFit().frame( height: 20) .accentColor(.green).transition(.asymmetric(insertion: .scale, removal: .identity))
+                    } else {
+                        Image(systemName: "square").resizable().scaledToFit().frame( height: 20) .accentColor(.gray).transition(.asymmetric(insertion: .scale, removal: .identity))
+                    }
+                    
+            })
         }
+        .padding()
         .frame(minWidth: .zero, maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(backgroundColor))
     }
     
     // MARK: Drawing Contstants
     let iconSize: CGFloat = 45
+    
+    
+    // MARK: Computed Drawing Properties
+    var plantNameText: Text {
+        return Text(plant.wrappedName)
+            .font(.headline)
+            .foregroundColor(isMarkedOff ? .gray : nil)
+            .strikethrough(isMarkedOff, color: .gray)
+    }
+    
+    var plantLastWateredText: Text {
+        return Text(lastWateredText)
+            .font(.subheadline)
+            .foregroundColor(isMarkedOff ? .gray : nil)
+            .strikethrough(isMarkedOff, color: .gray)
+    }
+    
+    var backgroundColor: Color {
+        if isMarkedOff {
+            return Color(UIColor.systemGray6)
+        } else {
+            return Color(UIColor.systemGray4)
+        }
+    }
 }
 
 struct PlantTodayViewListRow_Previews: PreviewProvider {

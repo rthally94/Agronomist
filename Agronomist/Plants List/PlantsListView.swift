@@ -14,6 +14,9 @@ struct PlantsListView: View {
     @Environment(\.managedObjectContext) var moc
     
     @State private var showAddPlantForm: Bool = false
+    @State private var showDeleteAlert: Bool = false
+    @State private var indexSetToDelete: IndexSet?
+    
     
     var plantNames: [String] {
         return plants.map{$0.wrappedName}
@@ -23,23 +26,34 @@ struct PlantsListView: View {
         NavigationView {
             ZStack(alignment: .bottomLeading) {
                 if plants.count > 0 {
-                    List(plants, id: \.id) { plant in
-                        NavigationLink(destination: PlantDetailView(plant: plant)) {
-                            PlantsListRowView(plant: plant)
-                                .padding(.vertical, 5)
+                    List {
+                        ForEach(plants, id: \.id) { plant in
+                            NavigationLink(destination: PlantDetailView(plant: plant)) {
+                                PlantsListRowView(plant: plant)
+                                    .padding(.vertical, 5)
+                            }
                         }
+                        .onDelete(perform: delete)
                     }
                     .listStyle(GroupedListStyle())
+                    .alert(isPresented: $showDeleteAlert, content: {
+                        Alert(title: Text("Are you sure?"), message: Text("This action cannot be undone."), primaryButton: .destructive(Text("Delete"), action: {
+                            if let index = self.indexSetToDelete?.first {
+                                let plant = self.plants[index]
+                                CoreDataHelper.deletePlant(plant, from: self.moc)
+                            }
+                        }), secondaryButton: .cancel())
+                    })
                     
                     Button(
                         action: {
                             self.showAddPlantForm = true
                     },
                         label: {
-                        Image(systemName: "plus.circle.fill").font(.title)
-                        Text("Add Plant").fontWeight(.semibold)
+                            Image(systemName: "plus.circle.fill").font(.title)
+                            Text("Add Plant").fontWeight(.semibold)
                     })
-                    .padding()
+                        .padding()
                 } else {
                     Button(
                         action: {
@@ -56,6 +70,7 @@ struct PlantsListView: View {
                             .padding()
                             .foregroundColor(.green)
                     })
+                        .transition(AnyTransition.scale.animation(.spring()))
                 }
             }
             .navigationBarHidden(plants.count == 0)
@@ -66,6 +81,11 @@ struct PlantsListView: View {
                 }
             }
         }
+    }
+    
+    private func delete(at offsets: IndexSet) {
+        indexSetToDelete = offsets
+        showDeleteAlert = true
     }
 }
 
