@@ -41,17 +41,17 @@ final class Formatter {
                 }
             }()
             
-            return "Next watering \(namedRelativeDateTimeFormatter.localizedString(for: nextWatering, relativeTo: lastWatering).replacingOccurrences(of: "now", with: "today"))"
+            return "Water \(namedRelativeDateTimeFormatter.localizedString(for: nextWatering, relativeTo: lastWatering).replacingOccurrences(of: "now", with: "today"))"
         }
         
-        return "Initial watering due"
+        return "First watering due"
     }
     
     static func lastWateringText(for plant: Plant) -> String {
         if let lastWatering = plant.waterLogArray.first {
             return "Watered \(namedRelativeDateTimeFormatter.localizedString(for: lastWatering.wrappedDate, relativeTo: Date()))".replacingOccurrences(of: "now", with: "today")
         } else {
-            return "Initial watering due"
+            return "First watering due"
         }
     }
 }

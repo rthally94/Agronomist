@@ -15,7 +15,7 @@ struct SectionView<Content>: View where Content: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(label).font(.headline).fontWeight(.semibold)
-            Group {
+            VStack {
                 content
             }
         }

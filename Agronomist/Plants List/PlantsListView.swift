@@ -74,7 +74,7 @@ struct PlantsListView: View {
                 }
             }
             .navigationBarHidden(plants.count == 0)
-            .navigationBarTitle("Plants")
+            .navigationBarTitle("Your Plants")
             .sheet(isPresented: $showAddPlantForm, onDismiss: {self.showAddPlantForm = false}) {
                 PlantForm { name, sun, water_int, water_unit in
                     CoreDataHelper.addPlant(name: name, sunTolerance: sun, waterRequirementInterval: water_int, waterRequirementUnit: water_unit, to: self.moc)

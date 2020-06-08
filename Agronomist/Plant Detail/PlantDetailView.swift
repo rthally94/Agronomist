@@ -36,7 +36,7 @@ struct PlantDetailView: View {
     var detailContent: some View {
         List {
             VStack {
-                Text(plant.wrappedName).font(.title).fontWeight(.semibold).padding()
+                Text(plant.wrappedName).font(.title).fontWeight(.semibold)
                 Text(nextWateringText)
                 HStack {
                     Spacer()
